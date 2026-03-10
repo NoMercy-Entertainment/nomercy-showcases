@@ -1,0 +1,877 @@
+/*
+╔══════════════════════════════════════════════════════╗
+║  NoMercy Video Player — Custom UI Stylesheet.        ║
+║  Carefully crafted so devs don't have to             ║
+║  Google "how to center a div" at 2am.                ║
+╚══════════════════════════════════════════════════════╝
+*/
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+/* ── Page ─────────────────────────────────────────────── */
+html {
+	height: 100%;
+}
+body {
+	background: #0f1117;
+	color: #e0e0e0;
+	font-family:
+		system-ui,
+		-apple-system,
+		sans-serif;
+	font-size: 13px;
+	margin: 0;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 12px 16px;
+	gap: 10px;
+	overflow: hidden;
+}
+
+main {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.site-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-shrink: 0;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #1e2130;
+}
+.site-title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+.site-logo {
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+}
+.github-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: #888;
+	text-decoration: none;
+	font-size: 0.8rem;
+	padding: 5px 10px;
+	border-radius: 6px;
+	border: 1px solid #2e323f;
+	transition:
+		color 0.15s,
+		border-color 0.15s,
+		background 0.15s;
+}
+.github-link:hover {
+	color: #fff;
+	border-color: #6c63ff;
+	background: #2a2d3a;
+}
+.site-name {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+h1 {
+	font-size: 1.3rem;
+	font-weight: 700;
+	color: #fff;
+	letter-spacing: -0.3px;
+}
+.site-slogan {
+	font-size: 0.72rem;
+	color: #7a7a99;
+	letter-spacing: 0.01em;
+	margin-top: 1px;
+}
+
+h2 {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #888;
+	margin-bottom: 10px;
+}
+
+/* ── Layout ───────────────────────────────────────────── */
+.layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) max(25%, 400px);
+	gap: 16px;
+	flex: 1;
+	min-height: 0;
+	align-items: stretch;
+}
+
+@media (max-width: 920px) {
+	body {
+		height: auto;
+		overflow: auto;
+	}
+	main {
+		flex: none;
+	}
+	.layout {
+		grid-template-columns: 1fr;
+		flex: none;
+	}
+	.side-column {
+		flex-direction: row;
+		align-items: start;
+		overflow: visible;
+	}
+	.playlist-panel {
+		flex: 1;
+		min-width: 0;
+		max-height: 260px;
+	}
+	.log-panel-outer {
+		margin-bottom: 24px;
+	}
+}
+
+@media (max-width: 520px) {
+	.btn-cluster.left {
+		flex-wrap: wrap;
+		row-gap: 4px;
+	}
+	.vol-slider {
+		flex: 1;
+		max-width: 90px;
+	}
+}
+
+/* ── Player column ────────────────────────────────────── */
+.player-column {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	min-width: 0;
+	min-height: 0;
+}
+
+/* The player attaches here */
+#player {
+	width: 100%;
+	flex: 1;
+	min-height: 0;
+	background: #000;
+	border-radius: 8px 8px 0 0;
+	overflow: hidden;
+	position: relative;
+}
+
+/* Controls overlay when fullscreen */
+#player:fullscreen .controls-bar,
+#player:-webkit-full-screen .controls-bar {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 999;
+	border-radius: 0;
+	border: none;
+	border-top: 1px solid rgba(255, 255, 255, 0.06);
+	background: linear-gradient(transparent, rgba(10, 12, 22, 0.97) 35%);
+	padding-bottom: 16px;
+}
+
+/* ── Controls bar ─────────────────────────────────────── */
+.controls-bar {
+	background: #1a1d26;
+	border: 1px solid #2a2d3a;
+	border-top: none;
+	border-radius: 0 0 8px 8px;
+	padding: 8px 12px 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+/* ── Seek row ─────────────────────────────────────────── */
+.seek-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.progress-wrap {
+	position: relative;
+	flex: 1;
+	height: 14px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+/* Track background */
+.progress-wrap::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 4px;
+	border-radius: 4px;
+	background: #2e323f;
+}
+
+.buffer-bar,
+.progress-bar {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 4px;
+	border-radius: 4px;
+	pointer-events: none;
+	transition: width 0.1s linear;
+	width: 0%;
+}
+.buffer-bar {
+	background: #444a5a;
+	z-index: 1;
+}
+.progress-bar {
+	background: #6c63ff;
+	z-index: 2;
+}
+
+.seek-slider {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	cursor: pointer;
+	z-index: 3;
+	margin: 0;
+}
+
+.time-display {
+	white-space: nowrap;
+	color: #aaa;
+	font-variant-numeric: tabular-nums;
+	font-size: 0.8rem;
+	min-width: 90px;
+	text-align: right;
+}
+
+/* ── Buttons row ──────────────────────────────────────── */
+.btn-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 6px;
+	flex-wrap: wrap;
+	row-gap: 6px;
+}
+
+.btn-cluster {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+.btn-cluster.right {
+	margin-left: auto;
+}
+
+/* ── Generic control button ───────────────────────────── */
+.ctrl-btn {
+	background: transparent;
+	border: 1px solid #2e323f;
+	color: #ccc;
+	border-radius: 6px;
+	padding: 5px 10px;
+	cursor: pointer;
+	font-size: 0.82rem;
+	line-height: 1;
+	height: 32px;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	transition:
+		background 0.15s,
+		color 0.15s,
+		border-color 0.15s;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	user-select: none;
+}
+.ctrl-btn:hover {
+	background: #2a2d3a;
+	color: #fff;
+	border-color: #6c63ff;
+}
+.ctrl-btn:active {
+	background: #363a4a;
+}
+.ctrl-btn.active {
+	background: #6c63ff22;
+	color: #9f9bff;
+	border-color: #6c63ff;
+}
+.ctrl-btn.icon-btn {
+	padding: 6px 8px;
+}
+.ctrl-btn.icon-btn svg {
+	display: block;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+}
+.ctrl-btn.play-btn {
+	height: 36px;
+	padding: 7px 10px;
+}
+.ctrl-btn.play-btn svg {
+	width: 20px;
+	height: 20px;
+}
+.ctrl-btn.small {
+	padding: 3px 8px;
+	font-size: 0.75rem;
+}
+.speed-label {
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: #ddd;
+	pointer-events: none;
+}
+
+/* ── Volume ───────────────────────────────────────────── */
+.vol-slider {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 80px;
+	height: 4px;
+	border-radius: 4px;
+	background: #2e323f;
+	outline: none;
+	cursor: pointer;
+}
+.vol-slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 13px;
+	height: 13px;
+	border-radius: 50%;
+	background: #6c63ff;
+	cursor: pointer;
+}
+.vol-label {
+	color: #888;
+	font-size: 0.75rem;
+	min-width: 30px;
+}
+
+/* ── Dropdown menus ───────────────────────────────────── */
+.menu-wrap {
+	position: relative;
+}
+.dropdown {
+	display: none;
+	position: absolute;
+	bottom: calc(100% + 8px);
+	right: 0;
+	background: #1e2130;
+	border: 1px solid #2e3245;
+	border-radius: 8px;
+	min-width: 160px;
+	padding: 0 0 4px;
+	z-index: 99;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+	max-height: 260px;
+	overflow-y: auto;
+}
+.dropdown.open {
+	display: block;
+}
+
+/* Custom scrollbar for dropdown menus */
+.dropdown {
+	scrollbar-width: thin;
+	scrollbar-color: #2e323f transparent;
+}
+.dropdown::-webkit-scrollbar {
+	width: 6px;
+}
+.dropdown::-webkit-scrollbar-track {
+	background: transparent;
+	border-radius: 3px;
+}
+.dropdown::-webkit-scrollbar-thumb {
+	background: #2e323f;
+	border-radius: 3px;
+}
+.dropdown::-webkit-scrollbar-thumb:hover {
+	background: #3e4255;
+}
+
+.dropdown-item {
+	padding: 7px 14px;
+	cursor: pointer;
+	color: #ccc;
+	font-size: 0.82rem;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	transition: background 0.12s;
+	border-radius: 4px;
+	margin: 1px 4px;
+	white-space: nowrap;
+}
+.dropdown-item:hover {
+	background: #2a2d3a;
+	color: #fff;
+}
+.dropdown-item.current {
+	color: #9f9bff;
+	font-weight: 600;
+}
+.dropdown-item.current::before {
+	content: '✓';
+	font-size: 0.85rem;
+}
+.dropdown-item:not(.current)::before {
+	content: '';
+	width: 0.85rem;
+	display: inline-block;
+}
+.dropdown-header {
+	padding: 6px 14px 5px;
+	font-size: 0.68rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #555;
+	border-bottom: 1px solid #2e3245;
+	margin-bottom: 3px;
+	pointer-events: none;
+	-webkit-user-select: none;
+	user-select: none;
+	position: sticky;
+	top: 0;
+	background: #1e2130;
+	z-index: 1;
+}
+
+/* ── Side column ──────────────────────────────────────── */
+.side-column {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+}
+
+/* ── Playlist panel ───────────────────────────────────── */
+.playlist-panel {
+	flex: 1;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: #1a1d26;
+	border: 1px solid #2a2d3a;
+	border-radius: 8px;
+	padding: 14px 14px 0;
+}
+.playlist-panel ul {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	scrollbar-width: thin;
+	scrollbar-color: #2e323f transparent;
+	padding-bottom: 14px;
+}
+.playlist-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 10px;
+	border-radius: 6px;
+	cursor: pointer;
+	border: 1px solid transparent;
+	transition:
+		background 0.15s,
+		border-color 0.15s;
+}
+.playlist-item:hover {
+	background: #22263a;
+	border-color: #3a3f55;
+}
+.playlist-item.active {
+	background: #1e1e3f;
+	border-color: #6c63ff;
+}
+.playlist-thumb-wrap {
+	position: relative;
+	width: 110px;
+	height: 62px;
+	flex-shrink: 0;
+	border-radius: 4px;
+	overflow: hidden;
+	background: #111;
+}
+.playlist-thumb {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+.playlist-thumb-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, transparent 45%, rgba(0, 0, 0, 0.72) 100%);
+	pointer-events: none;
+}
+.overlay-year {
+	position: absolute;
+	top: 4px;
+	left: 5px;
+	font-size: 0.62rem;
+	color: rgba(255, 255, 255, 0.92);
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+	pointer-events: none;
+}
+.overlay-dur {
+	position: absolute;
+	bottom: 4px;
+	right: 5px;
+	font-size: 0.62rem;
+	color: rgba(255, 255, 255, 0.95);
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+	pointer-events: none;
+}
+.playlist-info {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+.playlist-title {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: #ddd;
+	line-height: 1.3;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.playlist-desc {
+	font-size: 0.75rem;
+	color: #888;
+	line-height: 1.4;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.playlist-meta {
+	font-size: 0.72rem;
+	color: #555;
+	margin-top: 1px;
+}
+.playlist-num {
+	position: absolute;
+	bottom: 4px;
+	left: 5px;
+	font-size: 0.62rem;
+	font-weight: 700;
+	color: rgba(255, 255, 255, 0.9);
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+	pointer-events: none;
+	line-height: 1;
+}
+
+/* ── Log panel outer wrapper ─────────────────────────── */
+.log-panel-outer {
+	flex-shrink: 0;
+}
+
+/* ── Log panel ────────────────────────────────────────── */
+.log-panel {
+	background: #1a1d26;
+	border: 1px solid #2a2d3a;
+	border-radius: 8px;
+	padding: 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.log-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 2px;
+}
+.log-header h2 {
+	margin-bottom: 0;
+}
+
+.filter-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+}
+.filter-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 3px 9px;
+	border-radius: 100px;
+	border: 1px solid #2e323f;
+	font-size: 0.72rem;
+	cursor: pointer;
+	color: #888;
+	transition: all 0.15s;
+	-webkit-user-select: none;
+	user-select: none;
+}
+.filter-chip input[type='checkbox'] {
+	display: none;
+}
+.filter-chip.on {
+	color: #fff;
+	border-color: var(--chip-color, #6c63ff);
+	background: color-mix(in srgb, var(--chip-color, #6c63ff) 14%, transparent);
+}
+
+.log-body {
+	height: 200px;
+	overflow-y: auto;
+	font-family: 'Cascadia Code', 'Fira Code', monospace;
+	font-size: 0.72rem;
+	line-height: 1.6;
+	color: #aaa;
+	scrollbar-width: thin;
+	scrollbar-color: #2e323f transparent;
+}
+.log-entry {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	padding: 2px 0;
+	border-bottom: 1px solid #1e2130;
+	min-width: 0;
+}
+.log-head {
+	display: contents;
+}
+.log-time {
+	color: #555;
+	flex-shrink: 0;
+}
+.log-event {
+	color: #9f9bff;
+	flex-shrink: 0;
+	min-width: 130px;
+}
+.log-toggle {
+	background: #2a2d3a;
+	border: 1px solid #3a3f55;
+	color: #9f9bff;
+	cursor: pointer;
+	font-size: 0.62rem;
+	padding: 1px 6px;
+	border-radius: 4px;
+	line-height: 1.4;
+	flex-shrink: 0;
+	order: 99;
+}
+.log-toggle:hover {
+	background: #363a4a;
+	border-color: #6c63ff;
+	color: #fff;
+}
+.log-data {
+	color: #7a8499;
+	word-break: break-all;
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.log-data.collapsible {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.log-data.collapsible.expanded {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: unset;
+}
+.jk {
+	color: #7fb4ca;
+}
+.js {
+	color: #98c379;
+}
+.jb {
+	color: #e5c07b;
+}
+.jn {
+	color: #e06c75;
+}
+.jm {
+	color: #d19a66;
+}
+
+/* ── Keybinds button ─────────────────────────────────── */
+.kd-btn {
+	padding: 5px 9px;
+	font-size: 0.9rem;
+	font-weight: 700;
+	min-width: 28px;
+	justify-content: center;
+}
+
+/* ── Keybinds dialog ──────────────────────────────────── */
+#keybinds-dialog {
+	background: transparent;
+	border: none;
+	outline: none;
+	padding: 0;
+	max-width: 920px;
+	max-height: 90vh;
+	width: 88vw;
+	color: #e0e0e0;
+	margin: auto;
+}
+#keybinds-dialog::backdrop {
+	background: rgba(0, 0, 0, 0.82);
+}
+.kd-card {
+	position: relative;
+	background: #1a1d26;
+	border: 1px solid #2a2d3a;
+	border-radius: 14px;
+	padding: 24px 28px;
+	overflow: hidden;
+	max-height: 88vh;
+	scrollbar-width: thin;
+	scrollbar-color: #2e323f transparent;
+}
+.kd-card-title {
+	margin: 0 0 18px;
+	font-size: 1rem;
+	font-weight: 700;
+	text-align: center;
+	color: #fff;
+	letter-spacing: -0.2px;
+}
+.kd-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 22px 40px;
+}
+@media (max-width: 600px) {
+	.kd-grid {
+		grid-template-columns: 1fr;
+	}
+}
+.kd-group-title {
+	font-size: 0.68rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #555;
+	margin: 0 0 5px;
+}
+.kd-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 3px 0;
+	gap: 10px;
+	border-bottom: 1px solid #1e2130;
+}
+.kd-label {
+	font-size: 0.78rem;
+	color: rgba(255, 255, 255, 0.75);
+}
+.kd-keys {
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	flex-shrink: 0;
+}
+.kd-keys kbd {
+	background: rgba(255, 255, 255, 0.07);
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	border-radius: 5px;
+	padding: 2px 6px;
+	font-size: 0.7rem;
+	font-family: 'Cascadia Code', 'Fira Code', monospace;
+	color: #ccc;
+	white-space: nowrap;
+}
+.kd-plus {
+	font-size: 0.68rem;
+	color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Chapter markers ──────────────────────────────────── */
+.chapter-markers {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 4px;
+	width: 100%;
+	pointer-events: none;
+	z-index: 3;
+}
+.chapter-marker {
+	position: absolute;
+	top: -2px;
+	width: 2px;
+	height: calc(100% + 4px);
+	background: rgba(255, 255, 255, 0.3);
+	transform: translateX(-50%);
+	border-radius: 1px;
+}
+.chapter-tooltip {
+	position: absolute;
+	bottom: calc(100% + 8px);
+	transform: translateX(-50%);
+	background: rgba(15, 15, 23, 0.92);
+	color: #fff;
+	font-size: 0.68rem;
+	font-weight: 500;
+	white-space: nowrap;
+	padding: 3px 8px;
+	border-radius: 4px;
+	pointer-events: none;
+	z-index: 10;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	letter-spacing: 0.02em;
+}
+.chapter-tooltip.visible {
+	opacity: 1;
+}

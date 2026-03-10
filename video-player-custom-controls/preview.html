@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>NoMercy Video Player — Ultimate Example</title>
+
+		<!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  CODEPEN INSTRUCTIONS                                        ║
+  ║  ─────────────────────────────────────────────────────────   ║
+  ║  HTML  →  paste body content from index.html                 ║
+  ║  CSS   →  paste style.css                                    ║
+  ║  JS    →  paste app.js                                       ║
+  ║                                                              ║
+  ║  Under "JS Settings → Add External Scripts":                 ║
+  ║  https://cdn.jsdelivr.net/npm/                               ║
+  ║    @nomercy-entertainment/nomercy-video-player               ║
+  ║    @latest/dist/nomercy-video-player.iife.js                 ║
+  ╚══════════════════════════════════════════════════════════════╝
+  -->
+
+		<script src="https://cdn.jsdelivr.net/npm/@nomercy-entertainment/nomercy-video-player@latest/dist/nomercy-video-player.iife.js"></script>
+
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<main>
+			<header class="site-header">
+				<div class="site-title">
+					<img src="foreground.svg" class="site-logo" alt="NoMercy Entertainment" />
+					<div class="site-name">
+						<h1>NoMercy Video Player</h1>
+						<p class="site-slogan">Headless HTML5 player engine — build your own UI</p>
+					</div>
+				</div>
+				<a
+					href="https://github.com/NoMercy-Entertainment/nomercy-video-player"
+					class="github-link"
+					target="_blank"
+					rel="noopener"
+					title="View on GitHub"
+				>
+					<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" aria-hidden="true">
+						<path
+							d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+						/>
+					</svg>
+					GitHub
+				</a>
+			</header>
+
+			<div class="layout">
+				<!-- ── Player + controls ─────────────────────────── -->
+				<div class="player-column">
+					<!-- Container the player attaches to -->
+					<div id="player"></div>
+
+					<!-- Custom controls bar -->
+					<div class="controls-bar" id="controlsBar">
+						<!-- Seek row -->
+						<div class="seek-row">
+							<div class="progress-wrap" id="progressWrap">
+								<div class="buffer-bar" id="bufferBar"></div>
+								<div class="progress-bar" id="progressBar"></div>
+								<div class="chapter-markers" id="chapterMarkers"></div>
+								<input type="range" id="seekSlider" class="seek-slider" min="0" max="1000" value="0" step="1" />
+							</div>
+							<span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+						</div>
+
+						<!-- Buttons row -->
+						<div class="btn-row">
+							<!-- Left cluster -->
+							<div class="btn-cluster left">
+								<button class="ctrl-btn icon-btn" id="btnPrev" title="Previous"></button>
+								<button class="ctrl-btn icon-btn play-btn" id="btnPlay" title="Play / Pause"></button>
+								<button class="ctrl-btn icon-btn" id="btnNext" title="Next"></button>
+								<button class="ctrl-btn icon-btn" id="btnRew" title="−10 s"></button>
+								<button class="ctrl-btn icon-btn" id="btnFwd" title="+10 s"></button>
+
+								<!-- Volume -->
+								<button class="ctrl-btn icon-btn" id="btnMute" title="Mute"></button>
+								<input type="range" id="volumeSlider" class="vol-slider" min="0" max="100" value="100" step="1" />
+								<span class="vol-label" id="volLabel">100%</span>
+							</div>
+
+							<!-- Right cluster -->
+							<div class="btn-cluster right">
+								<!-- Speed -->
+								<div class="menu-wrap" id="speedWrap">
+									<button class="ctrl-btn menu-trigger" id="btnSpeed" title="Speed"></button>
+									<div class="dropdown" id="speedMenu"></div>
+								</div>
+
+								<!-- Quality -->
+								<div class="menu-wrap" id="qualityWrap">
+									<button class="ctrl-btn icon-btn menu-trigger" id="btnQuality" title="Quality"></button>
+									<div class="dropdown" id="qualityMenu"></div>
+								</div>
+
+								<!-- Subtitles -->
+								<div class="menu-wrap" id="subsWrap">
+									<button class="ctrl-btn icon-btn menu-trigger" id="btnSubs" title="Subtitles"></button>
+									<div class="dropdown" id="subsMenu"></div>
+								</div>
+
+								<!-- Audio -->
+								<div class="menu-wrap" id="audioWrap">
+									<button class="ctrl-btn icon-btn menu-trigger" id="btnAudio" title="Audio Track"></button>
+									<div class="dropdown" id="audioMenu"></div>
+								</div>
+
+								<!-- Keybinds -->
+								<button class="ctrl-btn kd-btn" id="btnKeybinds" title="Keyboard Shortcuts (?)">?</button>
+
+								<!-- Fullscreen -->
+								<button class="ctrl-btn icon-btn" id="btnFullscreen" title="Fullscreen"></button>
+							</div>
+						</div>
+						<!-- /btn-row -->
+					</div>
+					<!-- /controls-bar -->
+				</div>
+				<!-- /player-column -->
+
+				<!-- ── Playlist ───────────────────────────────────── -->
+				<div class="side-column">
+					<div class="playlist-panel">
+						<h2>Playlist</h2>
+						<ul id="playlistItems"></ul>
+					</div>
+				</div>
+			</div>
+			<!-- /layout -->
+
+			<!-- ── Event log (full width) ─────────────────────────── -->
+			<div class="log-panel-outer">
+				<div class="log-panel">
+					<div class="log-header">
+						<h2>Event Log</h2>
+						<button id="btnClearLog" class="ctrl-btn small">Clear</button>
+					</div>
+					<div class="filter-row" id="filterRow"></div>
+					<div class="log-body" id="logBody"></div>
+				</div>
+			</div>
+		</main>
+
+		<script src="app.js"></script>
+	</body>
+</html>
