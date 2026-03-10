@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>NoMercy Showcases</title>
+		<style>
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			html {
+				height: 100%;
+			}
+
+			body {
+				background: #0f1117;
+				color: #e0e0e0;
+				font-family: system-ui, -apple-system, sans-serif;
+				font-size: 14px;
+				margin: 0;
+				min-height: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				padding: 40px 24px;
+			}
+
+			.page {
+				max-width: 960px;
+				width: 100%;
+			}
+
+			/* ── Header ────────────────────────────────────── */
+			.site-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding-bottom: 24px;
+				border-bottom: 1px solid #1e2130;
+				margin-bottom: 32px;
+			}
+
+			.site-title {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+
+			.site-logo {
+				width: 36px;
+				height: 36px;
+				border-radius: 8px;
+			}
+
+			.site-name {
+				display: flex;
+				flex-direction: column;
+				gap: 2px;
+			}
+
+			h1 {
+				font-size: 1.4rem;
+				font-weight: 700;
+				color: #fff;
+				letter-spacing: -0.3px;
+			}
+
+			.site-slogan {
+				font-size: 0.76rem;
+				color: #7a7a99;
+				letter-spacing: 0.01em;
+			}
+
+			.github-link {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				color: #888;
+				text-decoration: none;
+				font-size: 0.82rem;
+				padding: 6px 12px;
+				border-radius: 6px;
+				border: 1px solid #2e323f;
+				transition: color 0.15s, border-color 0.15s, background 0.15s;
+			}
+
+			.github-link:hover {
+				color: #fff;
+				border-color: #6c63ff;
+				background: #2a2d3a;
+			}
+
+			/* ── Section ───────────────────────────────────── */
+			.section-title {
+				font-size: 0.72rem;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				color: #555;
+				font-weight: 700;
+				margin-bottom: 16px;
+			}
+
+			/* ── Cards grid ────────────────────────────────── */
+			.cards {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+				gap: 16px;
+				margin-bottom: 40px;
+			}
+
+			.card {
+				background: #1a1d26;
+				border: 1px solid #2a2d3a;
+				border-radius: 10px;
+				padding: 20px;
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				text-decoration: none;
+				color: inherit;
+				transition: border-color 0.2s, background 0.2s, transform 0.15s;
+			}
+
+			.card:hover {
+				border-color: #6c63ff;
+				background: #1e2130;
+				transform: translateY(-2px);
+			}
+
+			.card-icon {
+				width: 40px;
+				height: 40px;
+				border-radius: 8px;
+				background: #6c63ff18;
+				border: 1px solid #6c63ff33;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #9f9bff;
+				flex-shrink: 0;
+			}
+
+			.card-icon svg {
+				width: 20px;
+				height: 20px;
+			}
+
+			.card-title {
+				font-size: 1rem;
+				font-weight: 600;
+				color: #fff;
+			}
+
+			.card-desc {
+				font-size: 0.82rem;
+				color: #888;
+				line-height: 1.5;
+			}
+
+			.card-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+				margin-top: auto;
+				padding-top: 6px;
+			}
+
+			.tag {
+				font-size: 0.68rem;
+				padding: 2px 8px;
+				border-radius: 100px;
+				border: 1px solid #2e323f;
+				color: #7a7a99;
+				letter-spacing: 0.02em;
+			}
+
+			.tag.live {
+				border-color: #2d6a4f;
+				color: #52b788;
+			}
+
+			.tag.concept {
+				border-color: #6c63ff44;
+				color: #9f9bff;
+			}
+
+			/* ── Footer ────────────────────────────────────── */
+			.footer {
+				margin-top: auto;
+				padding-top: 32px;
+				border-top: 1px solid #1e2130;
+				text-align: center;
+				font-size: 0.75rem;
+				color: #444;
+			}
+
+			.footer a {
+				color: #6c63ff;
+				text-decoration: none;
+			}
+
+			.footer a:hover {
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<header class="site-header">
+				<div class="site-title">
+					<img
+						src="video-player-custom-controls/foreground.svg"
+						class="site-logo"
+						alt="NoMercy Entertainment"
+					/>
+					<div class="site-name">
+						<h1>NoMercy Showcases</h1>
+						<p class="site-slogan">Interactive demos for the NoMercy library ecosystem</p>
+					</div>
+				</div>
+				<a
+					href="https://github.com/NoMercy-Entertainment/nomercy-showcases"
+					class="github-link"
+					target="_blank"
+					rel="noopener"
+					title="View on GitHub"
+				>
+					<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" aria-hidden="true">
+						<path
+							d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+						/>
+					</svg>
+					GitHub
+				</a>
+			</header>
+
+			<!-- ── Video Player ─────────────────────────────── -->
+			<p class="section-title">Video Player</p>
+			<div class="cards">
+				<a href="video-player-custom-controls/preview.html" class="card">
+					<div class="card-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<rect x="2" y="3" width="20" height="14" rx="2" />
+							<line x1="8" y1="21" x2="16" y2="21" />
+							<line x1="12" y1="17" x2="12" y2="21" />
+						</svg>
+					</div>
+					<span class="card-title">Custom Controls</span>
+					<span class="card-desc">
+						Full custom UI with play/pause, seek bar, volume, quality/subtitle/audio selectors,
+						chapter markers, playlist panel, keyboard shortcuts dialog, and a live event log.
+					</span>
+					<div class="card-tags">
+						<span class="tag live">Live</span>
+						<span class="tag">Vanilla JS</span>
+						<span class="tag">HLS</span>
+						<span class="tag">Chapters</span>
+						<span class="tag">Playlist</span>
+					</div>
+				</a>
+
+				<a href="video-player-netflix-ui/index.html" class="card">
+					<div class="card-icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<polygon points="5 3 19 12 5 21 5 3" />
+						</svg>
+					</div>
+					<span class="card-title">Netflix-Style UI</span>
+					<span class="card-desc">
+						Cinematic viewing experience with fade-in controls, skip intro button, auto-play next
+						episode countdown, episode selector, preview thumbnails, and mobile gestures.
+					</span>
+					<div class="card-tags">
+						<span class="tag concept">Concept</span>
+						<span class="tag">Vanilla JS</span>
+						<span class="tag">Cinematic</span>
+						<span class="tag">Gestures</span>
+						<span class="tag">Episodes</span>
+					</div>
+				</a>
+			</div>
+
+			<footer class="footer">
+				<p>
+					Built by
+					<a href="https://github.com/NoMercy-Entertainment" target="_blank" rel="noopener"
+						>NoMercy Entertainment</a
+					>
+				</p>
+			</footer>
+		</div>
+	</body>
+</html>
