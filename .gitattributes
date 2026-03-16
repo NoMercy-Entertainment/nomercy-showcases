@@ -1,0 +1,15 @@
+# Auto-detect and normalize
+* text=auto eol=lf
+
+# Text files
+*.md            text diff=markdown
+*.json          text
+*.yml           text
+*.yaml          text
+*.gitignore     text
+
+# Binary: images
+*.png           binary
+*.jpg           binary
+*.gif           binary
+*.svg           text
