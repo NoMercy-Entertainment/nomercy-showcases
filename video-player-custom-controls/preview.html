@@ -12,17 +12,12 @@
   ║  ─────────────────────────────────────────────────────────   ║
   ║  HTML  →  paste body content from index.html                 ║
   ║  CSS   →  paste style.css                                    ║
-  ║  JS    →  paste app.js                                       ║
-  ║                                                              ║
-  ║  Under "JS Settings → Add External Scripts":                 ║
-  ║  https://cdn.jsdelivr.net/npm/                               ║
-  ║    @nomercy-entertainment/nomercy-video-player               ║
-  ║    @latest/dist/nomercy-video-player.iife.js                 ║
+  ║  JS    →  paste app.js (it imports the player as an ES       ║
+  ║           module from cdn.jsdelivr.net, nothing to add)      ║
   ╚══════════════════════════════════════════════════════════════╝
   -->
 
-		<script src="https://cdn.jsdelivr.net/npm/@nomercy-entertainment/nomercy-video-player@latest/dist/nomercy-video-player.iife.js"></script>
-
+		<link rel="icon" href="foreground.svg" type="image/svg+xml" />
 		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
@@ -149,6 +144,6 @@
 			</div>
 		</main>
 
-		<script src="app.js"></script>
+		<script type="module" src="app.js"></script>
 	</body>
 </html>

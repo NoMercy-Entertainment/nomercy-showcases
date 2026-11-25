@@ -5,10 +5,13 @@
 ║  This file gave it a face.                      ║
 ║                                                 ║
 ║  CDN → jsdelivr.net/npm/                        ║
-║    @nomercy-entertainment/nomercy-video-play    ║
-║    @latest/dist/nomercy-video-player.iife.js    ║
+║    @nomercy-entertainment/nomercy-video-player  ║
+║    @latest/+esm                                 ║
 ╚═════════════════════════════════════════════════╝
 */
+
+// ESM build: the IIFE bundle exposes only the factory, and KeyHandlerPlugin ships in the ESM entry.
+import nmplayer, { KeyHandlerPlugin } from 'https://cdn.jsdelivr.net/npm/@nomercy-entertainment/nomercy-video-player@latest/+esm';
 
 // ── SVG icon paths (Fluent UI 24px) ──────────────────────────────────────────
 const ICONS = {
@@ -55,12 +58,12 @@ function shortQualityLabel(raw) {
 }
 
 // ── Config ─────────────────────────────────────────────────────────────
-const BASE = 'https://raw.githubusercontent.com/NoMercy-Entertainment/media/master/Films/Films';
+const BASE = 'https://raw.githubusercontent.com/NoMercy-Entertainment/nomercy-media/master/Films';
 const IMG_BASE = 'https://image.tmdb.org/t/p/w780';
 
 const config = {
-	basePath: BASE,
-	imageBasePath: IMG_BASE,
+	baseUrl: BASE,
+	baseImageUrl: IMG_BASE,
 	muted: false,
 	preload: 'auto',
 	playbackRates: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
@@ -154,7 +157,7 @@ const config = {
 				},
 				{
 					id: 10,
-					file: '/Sintel.(2010)/thumbs_256x109.vtt',
+					file: '/Sintel.(2010)/thumbs_320x136.vtt',
 					kind: 'thumbnails',
 				},
 				{
@@ -164,7 +167,7 @@ const config = {
 				},
 				{
 					id: 12,
-					file: '/Sintel.(2010)/thumbs_256x109.webp',
+					file: '/Sintel.(2010)/thumbs_320x136.webp',
 					kind: 'sprite',
 				},
 			],
@@ -227,17 +230,12 @@ const config = {
 				},
 				{
 					id: 6,
-					file: '/Cosmos.Laundromat.(2015)/thumbs_256x144.vtt',
+					file: '/Cosmos.Laundromat.(2015)/thumbs_320x134.vtt',
 					kind: 'thumbnails',
 				},
 				{
 					id: 7,
-					file: '/Cosmos.Laundromat.(2015)/chapters.vtt',
-					kind: 'chapters',
-				},
-				{
-					id: 8,
-					file: '/Cosmos.Laundromat.(2015)/thumbs_256x144.webp',
+					file: '/Cosmos.Laundromat.(2015)/thumbs_320x134.webp',
 					kind: 'sprite',
 				},
 			],
@@ -1060,16 +1058,16 @@ const filterRow = document.getElementById('filterRow');
 
 // ── Event log state ─────────────────────────────────────────────────────
 const LOG_CATEGORIES = {
-	Lifecycle: { color: '#22d3ee', events: ['ready', 'setupError', 'dispose', 'remove', 'firstFrame'] },
-	Playback: { color: '#a78bfa', events: ['play', 'pause', 'playing', 'beforePlay', 'idle', 'complete', 'ended', 'waiting', 'stalled', 'buffer', 'bufferChange', 'bufferedEnd', 'canplay', 'loadstart', 'loadedmetadata', 'error', 'warning', 'autostartNotAllowed'] },
-	Time: { color: '#34d399', events: ['time', 'seek', 'seeked', 'duration', 'lastTimeTrigger'] },
+	Lifecycle: { color: '#22d3ee', events: ['ready', 'mediaReady', 'dispose', 'firstFrame'] },
+	Playback: { color: '#a78bfa', events: ['play', 'pause', 'playing', 'beforePlay', 'ended', 'waiting', 'stalled', 'canplay', 'error', 'warning', 'fatal'] },
+	Time: { color: '#34d399', events: ['time', 'seek', 'seeked', 'duration'] },
 	Volume: { color: '#fb923c', events: ['volume', 'mute'] },
-	Speed: { color: '#f472b6', events: ['speed', 'playbackRateChanged'] },
-	Quality: { color: '#60a5fa', events: ['levels', 'levelsChanged', 'levelsChanging', 'visualQuality'] },
-	Subtitles: { color: '#facc15', events: ['subtitleList', 'subtitleChanged', 'captionsList', 'captionsChanged'] },
-	Audio: { color: '#e879f9', events: ['audioTracks', 'audioTrackChanged'] },
-	Playlist: { color: '#4ade80', events: ['playlist', 'item', 'playlistComplete', 'playlistchange'] },
-	Display: { color: '#f87171', events: ['fullscreen', 'resize', 'active', 'float', 'pip', 'theater'] },
+	Speed: { color: '#f472b6', events: ['playbackRate'] },
+	Quality: { color: '#60a5fa', events: ['levels', 'level-switched', 'qualityState'] },
+	Subtitles: { color: '#facc15', events: ['subtitles', 'subtitle'] },
+	Audio: { color: '#e879f9', events: ['audioTracks', 'audioTrack'] },
+	Playlist: { color: '#4ade80', events: ['item', 'chapters', 'playlistReady', 'queue:exhausted'] },
+	Display: { color: '#f87171', events: ['fullscreen', 'activity', 'pip', 'theater'] },
 };
 
 const enabledCategories = {};
@@ -1258,7 +1256,7 @@ function buildPlaylist(items) {
 				}</div>`;
 
 		li.addEventListener('click', () => {
-			player.playlistItem(Number.parseInt(li.dataset.index));
+			player.item(Number.parseInt(li.dataset.index));
 		});
 
 		playlistEl.appendChild(li);
@@ -1282,7 +1280,7 @@ function fmtTime(s) {
 }
 
 // ── Create player ───────────────────────────────────────────────────────
-player = window.nmplayer('player').setup(config);
+player = nmplayer('player').setup(config);
 
 // ── Init icons ───────────────────────────────────────────────────────────
 [
@@ -1350,7 +1348,7 @@ player.on('time', (data) => {
 	const pct = data.percentage || 0;
 	progressBar.style.width = `${pct}%`;
 	seekSlider.value = Math.round(pct * 10);
-	timeDisplay.textContent = `${fmtTime(data.currentTime)} / ${fmtTime(data.duration)}`;
+	timeDisplay.textContent = `${fmtTime(data.position)} / ${fmtTime(data.duration)}`;
 
 	// Buffer
 	const video = player.videoElement;
@@ -1366,7 +1364,7 @@ player.on('time', (data) => {
 player.on('duration', (data) => {
 	if (!data)
 		return;
-	timeDisplay.textContent = `${fmtTime(data.currentTime)} / ${fmtTime(data.duration)}`;
+	timeDisplay.textContent = `${fmtTime(player.time())} / ${fmtTime(data.duration)}`;
 });
 
 // ── Volume ────────────────────────────────────────────────────────────────
@@ -1384,10 +1382,10 @@ btnMute.addEventListener('click', () => {
 player.on('volume', (data) => {
 	if (!data)
 		return;
-	const v = Math.round(data.volume);
+	const v = Math.round(data.level);
 	volumeSlider.value = v;
 	volLabel.textContent = `${v}%`;
-	updateMuteBtn(data.muted || v === 0);
+	updateMuteBtn(v === 0);
 });
 
 player.on('mute', (data) => {
@@ -1403,7 +1401,7 @@ function updateMuteBtn(muted) {
 
 // ── Fullscreen ────────────────────────────────────────────────────────────
 btnFullscreen.addEventListener('click', () => player.toggleFullscreen());
-player.on('fullscreen', (isFs) => {
+player.on('fullscreen', ({ active: isFs }) => {
 	const bar = document.getElementById('controlsBar');
 	const playerEl = document.getElementById('player');
 	const col = document.querySelector('.player-column');
@@ -1424,23 +1422,14 @@ btnSpeed.addEventListener('click', () => toggleDropdown(speedMenu));
 let currentSpeed = 1;
 
 function buildSpeedMenu() {
-	const rates = player.speeds && player.speeds().length ? player.speeds() : [0.5, 0.75, 1, 1.25, 1.5, 2];
+	const rates = player.playbackRates();
 	const items = rates.map(r => ({ label: r === 1 ? 'Normal (1×)' : `${r}×`, value: r }));
 	buildMenu(speedMenu, items, item => item.value === currentSpeed, (item) => {
-		currentSpeed = item.value;
-		player.speed(item.value);
-		btnSpeed.innerHTML = makeSpeedBtn(item.value);
-		buildSpeedMenu();
+		player.playbackRate(item.value);
 	}, 'Speed');
 }
 
-player.on('speed', (rate) => {
-	currentSpeed = rate;
-	btnSpeed.innerHTML = makeSpeedBtn(rate);
-	buildSpeedMenu();
-});
-
-player.on('playbackRateChanged', (rate) => {
+player.on('playbackRate', ({ rate }) => {
 	currentSpeed = rate;
 	btnSpeed.innerHTML = makeSpeedBtn(rate);
 	buildSpeedMenu();
@@ -1452,33 +1441,22 @@ btnQuality.addEventListener('click', () => {
 	toggleDropdown(qualityMenu);
 });
 
-let currentQualityId = -1;
-
 function buildQualityMenu() {
 	const levels = player.qualityLevels() || [];
-	const items = [{ id: -1, label: 'Auto' }].concat(levels.map((l) => {
-		const raw = (l._attrs && l._attrs[0] && l._attrs[0].RESOLUTION)
-			|| l.name || l.label || (`Level ${l.id}`);
-		return { id: l.id, label: formatQualityLabel(raw) };
-	}));
-	buildMenu(qualityMenu, items, item => item.id === currentQualityId, (item) => {
-		currentQualityId = item.id;
-		player.quality(item.id);
-		buildQualityMenu();
+	const current = player.quality();
+	const currentId = current === 'auto' ? -1 : current.index;
+	const items = [{ id: -1, label: 'Auto' }].concat(levels.map(l => ({ id: l.index, label: formatQualityLabel(l.label) })));
+	buildMenu(qualityMenu, items, item => item.id === currentId, (item) => {
+		player.quality(item.id === -1 ? 'auto' : item.id);
 	}, 'Quality');
 }
 
-player.on('levels', (levels) => {
-	if (levels && levels.length > 0)
-		buildQualityMenu();
-});
-
-player.on('levelsChanged', (data) => {
-	if (data) {
-		btnQuality.textContent = shortQualityLabel(data.name);
-		if (currentQualityId === -1)
-			currentQualityId = -1; // stay on auto label but reflect actual level
-	}
+player.on('levels', () => buildQualityMenu());
+player.on('qualityState', () => buildQualityMenu());
+player.on('level-switched', ({ level }) => {
+	const active = (player.qualityLevels() || []).find(l => l.index === level);
+	if (active)
+		btnQuality.textContent = shortQualityLabel(active.label);
 	buildQualityMenu();
 });
 
@@ -1490,19 +1468,29 @@ btnSubs.addEventListener('click', () => {
 
 function buildSubsMenu() {
 	const subs = player.subtitles() || [];
-	const current = player.subtitleIndex();
-	const items = [{ id: -1, label: 'Off' }].concat(subs.map((s) => {
-		return { id: s.id, label: s.label || s.language || (`Track ${s.id}`) };
+	const current = player.subtitle()?.index ?? -1;
+	const items = [{ id: -1, label: 'Off' }].concat(subs.map((s, i) => {
+		return { id: i, label: s.label || s.language || (`Track ${i + 1}`) };
 	}));
 	buildMenu(subsMenu, items, item => item.id === current, (item) => {
-		player.subtitle(item.id);
-		buildSubsMenu();
+		player.subtitle(item.id === -1 ? null : item.id);
 	}, 'Subtitles');
 }
 
-player.on('subtitleList', () => buildSubsMenu());
-player.on('captionsList', () => buildSubsMenu());
-player.on('subtitleChanged', () => buildSubsMenu());
+// With a `subtitleCue` listener the player hands over the active cues instead of using a native <track>.
+const subtitleOverlay = document.createElement('div');
+subtitleOverlay.className = 'subtitle-overlay';
+document.getElementById('player').appendChild(subtitleOverlay);
+player.on('subtitleCue', ({ cues }) => {
+	subtitleOverlay.replaceChildren(...cues.map((cue) => {
+		const line = document.createElement('div');
+		line.textContent = cue.plainText;
+		return line;
+	}));
+});
+
+player.on('subtitles', () => buildSubsMenu());
+player.on('subtitle', () => buildSubsMenu());
 
 // ── Audio ─────────────────────────────────────────────────────────────────
 btnAudio.addEventListener('click', () => {
@@ -1512,28 +1500,26 @@ btnAudio.addEventListener('click', () => {
 
 function buildAudioMenu() {
 	const tracks = player.audioTracks() || [];
-	const current = player.audioTrackIndex();
+	const current = player.audioTrack()?.index ?? 0;
 	if (tracks.length <= 1) {
 		audioMenu.innerHTML = '<div class="dropdown-header">Audio Track</div><div class="dropdown-item" style="color:#555;pointer-events:none">Only one track</div>';
 		return;
 	}
-	buildMenu(audioMenu, tracks.map(t => ({ id: t.id, label: t.name || t.language || (`Track ${t.id}`) })), item => item.id === current, (item) => {
+	buildMenu(audioMenu, tracks.map((t, i) => ({ id: i, label: t.label || t.language || (`Track ${i + 1}`) })), item => item.id === current, (item) => {
 		player.audioTrack(item.id);
-		buildAudioMenu();
 	}, 'Audio Track');
 }
 
 player.on('audioTracks', () => buildAudioMenu());
-player.on('audioTrackChanged', () => buildAudioMenu());
-
-// ── Playlist events ───────────────────────────────────────────────────────
-player.on('playlist', (items) => {
-	buildPlaylist(items);
-});
+player.on('audioTrack', () => buildAudioMenu());
 
 let currentChapters = [];
 
-function renderChapterMarkers(chapters) {
+function renderChapterMarkers(list) {
+	const duration = player.duration();
+	const chapters = duration > 0
+		? list.map(ch => ({ left: (ch.start / duration) * 100, title: ch.title }))
+		: [];
 	currentChapters = chapters;
 	chapterMarkers.innerHTML = '';
 	chapters.forEach((ch) => {
@@ -1567,16 +1553,19 @@ seekSlider.addEventListener('mouseleave', () => {
 player.on('chapters', () => {
 	renderChapterMarkers(player.chapters());
 });
+player.on('duration', () => {
+	renderChapterMarkers(player.chapters());
+});
 
-player.on('item', (item) => {
-	const idx = player.playlistIndex();
-	highlightPlaylistItem(idx);
+player.on('item', ({ item, index }) => {
+	highlightPlaylistItem(index);
 	// Reset controls for new item
 	progressBar.style.width = '0%';
 	bufferBar.style.width = '0%';
 	seekSlider.value = 0;
 	chapterMarkers.innerHTML = '';
-	timeDisplay.textContent = `0:00 / ${item.duration || '0:00'}`;
+	currentChapters = [];
+	timeDisplay.textContent = `0:00 / ${fmtTime(Number(item?.duration))}`;
 	buildSpeedMenu();
 });
 
@@ -1588,9 +1577,7 @@ player.on('ready', () => {
 });
 
 // ── Keyboard shortcuts (built-in KeyHandlerPlugin) ───────────────────────
-const keyPlugin = new window.nmplayer.KeyHandlerPlugin();
-keyPlugin.initialize(player);
-keyPlugin.use();
+player.addPlugin(KeyHandlerPlugin);
 
 // ── Keybinds legend dialog ────────────────────────────────────────────────
 const KEYBIND_LEGEND = [
@@ -1799,7 +1786,7 @@ const ALL_EVENTS = (function () {
 		});
 	});
 	// A few extras worth logging
-	['playlistComplete', 'switch-season', 'cast', 'firstFrame'].forEach((e) => {
+	['cast'].forEach((e) => {
 		if (!evts.includes(e))
 			evts.push(e);
 	});
